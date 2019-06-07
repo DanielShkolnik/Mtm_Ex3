@@ -43,7 +43,7 @@ public :
     string singer() const;
     bool isRegistered() const;
     void updateRegistered(bool setRegistration);
-    ~Participant();
+    ~Participant()= default;
 };
 ostream& operator<<(ostream& os, const Participant& participant);
 
@@ -62,12 +62,12 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
+    explicit Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
     string state() const;
     VoterType voterType() const;
     int timesOfVotes() const;
     Voter& operator++();
-    ~Voter();
+    ~Voter()= default;
 };
 ostream& operator<<(ostream& os, const Voter& voter);
 
