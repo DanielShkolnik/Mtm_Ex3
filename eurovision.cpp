@@ -22,7 +22,7 @@ MainControl& MainControl::operator+=(const Participant& participant){
     return *this;
 }
 
-MainControl& MainControl::operator+=(Vote& vote){
+MainControl& MainControl::operator+=(Vote vote){
     if(vote.voter.voterType()==Regular && vote.voter.timesOfVotes() < this->maxRegularTimesToVote){
         if(vote.selectedStates[0]==vote.voter.state()){
             return *this;
@@ -92,9 +92,30 @@ bool MainControl::legalParticipant(const Participant& participant) const{
 bool MainControl::participate(string stateName) const{
     return (this->getParticipantIndexByStateName(stateName)>=0);
 }
+
+void MainControl::sortParticipantsByStateNames(){
+    ParticipantScore tempArray[this->maxParticipants];
+
+    for(int i=0; i<this->maxParticipants; i++) {
+        for(int j=0; j<this->maxParticipants; j++){
+
+        }
+    }
+}
+
+
+ostream& operator<<(ostream& os, const MainControl& mainControl){
+
+    if (mainControl.phase==Registration){
+        os << Registration << endl;
+    }
+
+}
+
 //*************************Participant**************************************
 
-Participant::Participant(string stateName, string songName, string singerName, int songLength):
+Participant::Participant(const string& stateName, const string& songName,int songLength,
+                         const string& singerName):
                          stateName(stateName) {
     this->songName= songName;
     this->singerName=singerName;

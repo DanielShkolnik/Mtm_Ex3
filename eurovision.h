@@ -33,7 +33,8 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    explicit Participant(string stateName, string songName="", string singerName="", int songLength=0);
+    explicit Participant(const string& stateName, const string& songName="",int songLength=0,
+            const string& singerName="");
     Participant(const Participant& participant) = delete;
     Participant& operator=(const Participant& par) = delete;
     void update(string songName, int songLength, string singerName);
@@ -82,6 +83,7 @@ struct Vote
     string* selectedStates;
     Vote(Voter voter, string state1, string state2="", string state3="", string state4="", string state5="",
          string state6="", string state7="", string state8="", string state9="", string state10="");
+    Vote(const Vote&) = default;
     ~Vote();
 };
 
@@ -116,7 +118,9 @@ private :
     int maxRegularTimesToVote;
     bool isStateExist(string stateName);
     int getFirstEmptyIndex();
-    int getParticipantIndexByStateName(string stateName) const ;
+    int getParticipantIndexByStateName(string stateName) const;
+    void sortParticipantsByStateNames();
+
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.
@@ -124,13 +128,15 @@ private :
 public :
     explicit MainControl(int maxSongLength=180, int maxParticipants=26, int maxRegularTimesToVote=5);
     MainControl& operator+=(const Participant& participant);
-    MainControl& operator+=(Vote& vote);
+    MainControl& operator+=(Vote vote);
     void setPhase(Phase phase);
     MainControl& operator-=(const Participant& participant);
     bool legalParticipant(const Participant& participant) const ;
     bool participate(string stateName) const ;
     ~MainControl();
+    friend ostream& operator<<(ostream& os, const MainControl& mainControl);
 };
+
 ostream& operator<<(ostream& os, const MainControl& mainControl);
 
 // -----------------------------------------------------------
