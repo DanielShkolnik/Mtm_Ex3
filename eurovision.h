@@ -100,7 +100,7 @@ public:
     void addJudgeVote(int place);
     void resetVotes();
     const Participant* getParticipant();
-    ~ParticipantScore();
+    ~ParticipantScore()= default;
 };
 
 // -----------------------------------------------------------

@@ -193,5 +193,37 @@ Vote::~Vote(){
 //*************************ParticipantScore**************************************
 
 ParticipantScore::ParticipantScore(){
-
+    this->participant= nullptr;
+    this->regularVotes=0;
+    this->judgeVotes=0;
 }
+
+void ParticipantScore::setParticipant(const Participant* participant){
+    this->participant=participant;
+}
+
+void ParticipantScore::addRegularVote(){
+    this->regularVotes+=1;
+}
+
+void ParticipantScore::addJudgeVote(int place){
+    if (place==0) {
+        this->judgeVotes+=12;
+    }
+    else if (place==1) {
+        this->judgeVotes+=10;
+    }
+    else {
+        this->judgeVotes+=(10-place);
+    }
+}
+
+void ParticipantScore::resetVotes(){
+    this->regularVotes=0;
+    this->judgeVotes=0;
+}
+
+const Participant* ParticipantScore::getParticipant(){
+    return this->participant;
+}
+
