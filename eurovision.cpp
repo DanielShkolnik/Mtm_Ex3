@@ -3,7 +3,8 @@
 
 //*************************MAIN CONTROL**************************************
 #define MAX_JUDGE_VOTES 10
-
+#define FULL -1
+#define NOT_IN_ARRAY -1
 MainControl::MainControl(int maxSongLength, int maxParticipants, int maxRegularTimesToVote):
                         phase(Registration),participantScores(new ParticipantScore[maxParticipants]){
     this->maxSongLength=maxSongLength;
@@ -61,11 +62,41 @@ MainControl::~MainControl(){
     delete[] this->participantScores;
 }
 
+bool MainControl::isStateExist(string stateName){
+    return (this->getParticipantIndexByStateName(stateName) >= 0);
+}
+int MainControl::getFirstEmptyIndex(){
+    for(int i=0;i<this->maxParticipants;i++){
+        if(this->participantScores[i].getParticipant() == nullptr){
+            return i;
+        }
+    }
+    return FULL;
+}
+
+int MainControl::getParticipantIndexByStateName(string stateName) const {
+    for(int i=0;i<this->maxParticipants;i++){
+        if(this->participantScores[i].getParticipant()->state()==stateName){
+            return i;
+        }
+    }
+    return NOT_IN_ARRAY;
+}
+
+bool MainControl::legalParticipant(const Participant& participant) const{
+    if(participant.state()=="" || participant.song()=="" || participant.timeLength() > this->maxSongLength){
+        return false;
+    }
+    return true;
+}
+bool MainControl::participate(string stateName) const{
+    return (this->getParticipantIndexByStateName(stateName)>=0);
+}
 //*************************Participant**************************************
 
 Participant::Participant(string stateName, string songName, string singerName, int songLength):
                          stateName(stateName) {
-    this->songName=songName;
+    this->songName= songName;
     this->singerName=singerName;
     this->songLength=songLength;
     this->registered= false;
