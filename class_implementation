@@ -1,0 +1,87 @@
+Class Participant{
+    private:
+    const string stateName
+    string songName
+    string singerName
+    int songLength
+    bool registered
+
+    public:
+    Participant(String stateName, String songName="", Sting singerName="", int songLength=0)
+    Participant( const Participant& participant) = delete
+    &Participant operator=(const Participant& par) = delete
+    void update(String songName, int songLength, String singerName)
+    String state()
+    String song()
+    int timeLength()
+    String singer()
+    bool isRegistered()
+    updateRegistered(bool setRegistration)
+    ~Participant()
+}
+
+--Participant.cpp/h--
+ostream& operator<<(ostream& os, const Participant& participant)
+
+
+Class MainControl{
+    private:
+    Phase phase
+    ParticipantScore* participantScores
+
+    public:
+    MainControl() //initialize the data structure
+    MainControl& operator+=(const Participant& participant)
+    MainControl& operator+=(const Vote& vote)
+    void setPhase(Phase phase)
+    MainControl& operator-=(const Participant& participant)
+    bool legalParticipant(const Participant& participant)
+    bool participate(String stateName)
+    ~MainControl()
+}
+
+--MainControl.cpp/h--
+ostream& operator<<(ostream& os, const MainControl& mainControl)
+
+
+Class Voter{
+    private:
+    String originState
+    VoterType voterType
+    int numOfVotes
+
+    public:
+    Voter(String originState, VoterType voterType=Regular) // implement numOfVotes=0
+    String state()
+    VoterType voterType()
+    int timesOfVotes()
+    voter& operator++()
+    ~Voter()
+
+}
+
+--Voter.cpp/h--
+ostream& operator<<(ostream& os, const Voter& voter)
+
+Class Vote{
+    private:
+    Voter voter
+    String* selectedStates
+
+    public:
+    Vote(Voter voter, String state1, String state2='', String state3='', String state4='', String state5='',
+         String state6='', String state7='', String state8='', String state9='', String state10='')
+    ~Vote()
+}
+
+Class ParticipantScore{
+    private:
+    Participant participant
+    int regularVotes
+    int judgeVotes
+
+    public:
+    ParticipantScore(Participant participant)
+    void addRegularVote()
+    void addJudgeVote(int score)
+}
