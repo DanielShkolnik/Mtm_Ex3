@@ -8,7 +8,6 @@ using std::endl;
 using std::cout;
 using std::ostream;
 
-
 // it's allowed to define here any using statements, according to needs.
 // do NOT define here : using namespace std;
 
@@ -38,11 +37,11 @@ public :
     Participant(const Participant& participant) = delete;
     Participant& operator=(const Participant& par) = delete;
     void update(string songName, int songLength, string singerName);
-    string state();
-    string song();
-    int timeLength();
-    string singer();
-    bool isRegistered();
+    string state() const;
+    string song() const;
+    int timeLength() const;
+    string singer() const;
+    bool isRegistered() const;
     void updateRegistered(bool setRegistration);
     ~Participant();
 };
@@ -64,9 +63,9 @@ private :
 // NO friend is allowed here.
 public :
     Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
-    string state();
-    VoterType voterType();
-    int timesOfVotes();
+    string state() const;
+    VoterType voterType() const;
+    int timesOfVotes() const;
     Voter& operator++();
     ~Voter();
 };
@@ -90,15 +89,16 @@ struct Vote
 
 class ParticipantScore{
 private:
-    Participant* participant;
+    const Participant* participant;
     int regularVotes;
     int judgeVotes;
 
 public:
     ParticipantScore();
-    void setParticipant(Participant* participant);
+    void setParticipant(const Participant* participant);
     void addRegularVote();
-    void addJudgeVote(int score);
+    void addJudgeVote(int place);
+    void resetVotes();
     ~ParticipantScore();
 };
 
@@ -110,19 +110,24 @@ class MainControl
 private :
     Phase phase;
     ParticipantScore* participantScores;
-
+    int maxSongLength;
+    int maxParticipants;
+    int maxRegularTimesToVote;
+    bool isStateExist(string stateName);
+    int getFirstEmptyIndex();
+    int getParticipantIndexByStateName(string stateName);
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // Also it's allowed here to define friend.
 public :
-    MainControl(int maxSongLength=180, int maxParticipants=26, int maxRegularTimesToVote=5);
+    explicit MainControl(int maxSongLength=180, int maxParticipants=26, int maxRegularTimesToVote=5);
     MainControl& operator+=(const Participant& participant);
-    MainControl& operator+=(const Vote& vote);
-    void ase(Phase phase);
+    MainControl& operator+=(Vote& vote);
+    void setPhase(Phase phase);
     MainControl& operator-=(const Participant& participant);
-    bool legalParticipant(const Participant& participant);
-    bool participate(string stateName);
+    bool legalParticipant(const Participant& participant) const ;
+    bool participate(string stateName) const ;
     ~MainControl();
 };
 ostream& operator<<(ostream& os, const MainControl& mainControl);
