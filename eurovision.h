@@ -32,7 +32,7 @@ public :
 
 class Voter
 {
-/ relevant private members can be defined here, if necessary.
+// relevant private members can be defined here, if necessary.
 
 public :
 
@@ -61,7 +61,7 @@ struct Vote
 
 class MainControl
 {
-/ relevant private members can be defined here, if necessary.
+// relevant private members can be defined here, if necessary.
 
 public :
 
