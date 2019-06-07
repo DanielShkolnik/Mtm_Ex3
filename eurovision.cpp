@@ -4,9 +4,8 @@
 //*************************MAIN CONTROL**************************************
 #define MAX_JUDGE_VOTES 10
 
-MainControl::MainControl(int maxSongLength, int maxParticipants,
-                        int maxRegularTimesToVote): phase(Registration),
-                        participantScores(new ParticipantScore[maxParticipants]){
+MainControl::MainControl(int maxSongLength, int maxParticipants, int maxRegularTimesToVote):
+                        phase(Registration),participantScores(new ParticipantScore[maxParticipants]){
     this->maxSongLength=maxSongLength;
     this->maxParticipants=maxParticipants;
     this->maxRegularTimesToVote=maxRegularTimesToVote;
