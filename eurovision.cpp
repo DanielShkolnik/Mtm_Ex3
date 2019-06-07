@@ -77,5 +77,90 @@ void Participant::update(string songName, int songLength, string singerName){
         this->songLength=songLength;
         this->singerName=singerName;
     }
+}
+
+string Participant::state() const{
+    return this->stateName;
+}
+
+string Participant::song() const{
+    return this->songName;
+}
+
+int Participant::timeLength() const{
+    return this->songLength;
+}
+
+string Participant::singer() const{
+    return this->singerName;
+}
+
+bool Participant::isRegistered() const {
+    return this->registered;
+}
+
+void Participant::updateRegistered(bool setRegistration){
+    this->registered=setRegistration;
+}
+
+ostream& operator<<(ostream& os, const Participant& participant){
+    return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength()
+                << '/' << participant.singer() << '/' << ']';
+}
+
+
+//*************************Voter**************************************
+
+Voter::Voter(string originState, VoterType voterType){
+    this->originState=originState;
+    this->typeOfVoter=voterType;
+    this->numOfVotes=0;
+}
+
+string Voter::state() const {
+    return this->originState;
+}
+
+VoterType Voter::voterType() const {
+    return this->typeOfVoter;
+}
+
+int Voter::timesOfVotes() const{
+    return this->numOfVotes;
+}
+
+Voter& Voter::operator++(){
+    this->numOfVotes+=1;
+    return *this;
+}
+
+ostream& operator<<(ostream& os, const Voter& voter){
+    return os << '<' << voter.state() << '/' << voter.voterType()  << '>';
+}
+
+//*************************Vote**************************************
+
+Vote::Vote(Voter voter, string state1, string state2, string state3, string state4, string state5,
+        string state6, string state7, string state8, string state9, string state10):
+        voter(voter.state(),voter.voterType()), selectedStates(new string[MAX_JUDGE_VOTES]) {
+    this->selectedStates[0]=state1;
+    this->selectedStates[1]=state2;
+    this->selectedStates[2]=state3;
+    this->selectedStates[3]=state4;
+    this->selectedStates[4]=state5;
+    this->selectedStates[5]=state6;
+    this->selectedStates[6]=state7;
+    this->selectedStates[7]=state8;
+    this->selectedStates[8]=state9;
+    this->selectedStates[9]=state10;
+}
+
+Vote::~Vote(){
+    delete[] selectedStates;
+}
+
+//*************************ParticipantScore**************************************
+
+ParticipantScore::ParticipantScore(){
 
 }
