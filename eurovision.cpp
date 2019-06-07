@@ -61,6 +61,21 @@ MainControl::~MainControl(){
     delete[] this->participantScores;
 }
 
+//*************************Participant**************************************
 
+Participant::Participant(string stateName, string songName, string singerName, int songLength):
+                         stateName(stateName) {
+    this->songName=songName;
+    this->singerName=singerName;
+    this->songLength=songLength;
+    this->registered= false;
+}
 
+void Participant::update(string songName, int songLength, string singerName){
+    if (!this->registered){
+        this->songName=songName;
+        this->songLength=songLength;
+        this->singerName=singerName;
+    }
 
+}

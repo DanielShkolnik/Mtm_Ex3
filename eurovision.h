@@ -33,7 +33,7 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    Participant(string stateName, string songName="", string singerName="", int songLength=0);
+    explicit Participant(string stateName, string songName="", string singerName="", int songLength=0);
     Participant(const Participant& participant) = delete;
     Participant& operator=(const Participant& par) = delete;
     void update(string songName, int songLength, string singerName);
