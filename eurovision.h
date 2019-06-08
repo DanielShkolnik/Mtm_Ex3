@@ -63,7 +63,7 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    explicit Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
+    explicit Voter(string originState, VoterType voterType=Regular, int numOfVotes=0); // implement numOfVotes=0
     string state() const;
     VoterType voterType() const;
     int timesOfVotes() const;
@@ -79,9 +79,9 @@ struct Vote
 // ALL is public here.
 // need to define ONLY data members and c'tr and d'tr.
 // NO NEED to define anything else.
-    Voter voter;
+    Voter& voter;
     string* selectedStates;
-    Vote(Voter voter, string state1, string state2="", string state3="", string state4="", string state5="",
+    Vote(Voter& voter, string state1, string state2="", string state3="", string state4="", string state5="",
          string state6="", string state7="", string state8="", string state9="", string state10="");
     Vote(const Vote&) = default;
     ~Vote();
@@ -91,7 +91,7 @@ struct Vote
 
 class ParticipantScore{
 private:
-    const Participant* participant;
+    Participant* participant;
     int regularVotes;
     int judgeVotes;
 
@@ -99,14 +99,15 @@ public:
     ParticipantScore();
     ParticipantScore(const ParticipantScore&) = default;
     ParticipantScore& operator=(const ParticipantScore&) = default;
-    void setParticipant(const Participant* participant);
+    void setParticipant(Participant* participant);
     void addRegularVote();
     void addJudgeVote(int place);
     void resetVotes();
     const Participant* getParticipant();
     ~ParticipantScore()= default;
+    friend ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
 };
-
+ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
 // -----------------------------------------------------------
 
 class MainControl
@@ -129,14 +130,14 @@ private :
 // Also it's allowed here to define friend.
 public :
     explicit MainControl(int maxSongLength=180, int maxParticipants=26, int maxRegularTimesToVote=5);
-    MainControl& operator+=(const Participant& participant);
+    MainControl& operator+=(Participant& participant);
     MainControl& operator+=(Vote vote);
     void setPhase(Phase phase);
     MainControl& operator-=(const Participant& participant);
     bool legalParticipant(const Participant& participant) const ;
     bool participate(string stateName) const ;
     ~MainControl();
-    friend ostream& operator<<(ostream& os, const MainControl& mainControl);
+    friend ostream& operator<<(ostream& os, MainControl& mainControl);
 };
 
 ostream& operator<<(ostream& os, const MainControl& mainControl);
