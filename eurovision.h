@@ -97,6 +97,8 @@ private:
 
 public:
     ParticipantScore();
+    ParticipantScore(const ParticipantScore&) = default;
+    ParticipantScore& operator=(const ParticipantScore&) = default;
     void setParticipant(const Participant* participant);
     void addRegularVote();
     void addJudgeVote(int place);
@@ -120,7 +122,7 @@ private :
     int getFirstEmptyIndex();
     int getParticipantIndexByStateName(string stateName) const;
     void sortParticipantsByStateNames();
-
+    void swapParticipantsByIndex(int participant1,int participant2);
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.

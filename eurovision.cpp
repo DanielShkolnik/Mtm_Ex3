@@ -94,15 +94,17 @@ bool MainControl::participate(string stateName) const{
 }
 
 void MainControl::sortParticipantsByStateNames(){
-    ParticipantScore tempArray[this->maxParticipants];
-
     for(int i=0; i<this->maxParticipants; i++) {
         for(int j=0; j<this->maxParticipants; j++){
 
         }
     }
 }
-
+void MainControl::swapParticipantsByIndex(int participantScore1,int participantScore2){
+    ParticipantScore temp = this->participantScores[participantScore1];
+    this->participantScores[participantScore1] = this->participantScores[participantScore2];
+    this->participantScores[participantScore2] = temp;
+}
 
 ostream& operator<<(ostream& os, const MainControl& mainControl){
 
