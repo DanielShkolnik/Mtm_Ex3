@@ -63,7 +63,7 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    explicit Voter(string originState, VoterType voterType=Regular, int numOfVotes=0); // implement numOfVotes=0
+    explicit Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
     string state() const;
     VoterType voterType() const;
     int timesOfVotes() const;

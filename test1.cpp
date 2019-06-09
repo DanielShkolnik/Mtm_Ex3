@@ -62,11 +62,11 @@ int main()
   Participant p4("Australia","Song_Australia",180,"Singer_Australia");
   Participant p5("Cyprus","Song_Cyprus",172,"Singer_Cyprus");
 
-//  Participant p11(p1);  // compilation error. every potential participant
+// Participant p11(p1);  // compilation error. every potential participant
                           //  is unique as an object. Can not be copied from
                           //  another participant.*/
 
-//  Participant p12; // compilation error. Must give values to all features.
+// Participant p12; // compilation error. Must give values to all features.
 //  Participant p13("","",0,""); // OK for here. This is not legal initialization,
                                  // however, there are values for all 4 basic features
                                  // and still p13 is not yet registered in the system,

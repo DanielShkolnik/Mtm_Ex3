@@ -51,7 +51,11 @@ MainControl& MainControl::operator+=(Vote vote){
 }
 
 void MainControl::setPhase(Phase phase){
-    this->phase = phase;
+    if((this->phase==Registration && phase==Contest) ||
+        (this->phase==Contest && phase==Voting)){
+        this->phase = phase;
+    }
+
 }
 
 MainControl& MainControl::operator-=(const Participant& participant){
@@ -126,6 +130,9 @@ void MainControl::swapParticipantsByIndex(int participantScore1,int participantS
 
 ostream& operator<<(ostream& os, MainControl& mainControl){
     os << "{" << endl;
+    if(mainControl.phase==Contest){
+        os << "Contest"<< endl;
+    }
     mainControl.sortParticipantsByStateNames();
     if (mainControl.phase==Registration){
         os << "Registration" << endl;
@@ -201,10 +208,10 @@ ostream& operator<<(ostream& os, const Participant& participant){
 
 //*************************Voter**************************************
 
-Voter::Voter(string originState, VoterType voterType, int numOfVotes){
+Voter::Voter(string originState, VoterType voterType){
     this->originState=originState;
     this->typeOfVoter=voterType;
-    this->numOfVotes=numOfVotes;
+    this->numOfVotes=0;
 }
 
 string Voter::state() const {
