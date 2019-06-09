@@ -3,4 +3,4 @@ project(Part1)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Part1 eurovision.h test1.cpp eurovision.cpp)
+add_executable(Part1 eurovision.h eurovision.cpp test2.cpp)

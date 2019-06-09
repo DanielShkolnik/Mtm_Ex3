@@ -26,6 +26,9 @@ MainControl& MainControl::operator+=(Participant& participant){
 }
 
 MainControl& MainControl::operator+=(Vote vote){
+    if(this->phase!=Voting){
+        return *this;
+    }
     if(vote.voter.voterType()==Regular && vote.voter.timesOfVotes() < this->maxRegularTimesToVote){
         if(vote.selectedStates[0]==vote.voter.state()){
             return *this;
@@ -33,10 +36,10 @@ MainControl& MainControl::operator+=(Vote vote){
         int index = this->getParticipantIndexByStateName(vote.selectedStates[0]);
         if(index >= 0) {
             this->participantScores[index].addRegularVote();
+            ++(vote.voter);
         }
-        ++(vote.voter);
     }
-    if(vote.voter.timesOfVotes() < 1){
+    if(vote.voter.voterType()==Judge && vote.voter.timesOfVotes() < 1){
         for(int i=0;i<MAX_JUDGE_VOTES;i++){
             if(vote.selectedStates[i] != vote.voter.state()){
                 int index = this->getParticipantIndexByStateName(vote.selectedStates[i]);
