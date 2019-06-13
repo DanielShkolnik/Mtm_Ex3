@@ -37,7 +37,7 @@ public :
             const string& singerName="");
     Participant(const Participant& participant) = delete;
     Participant& operator=(const Participant& par) = delete;
-    void update(string songName, int songLength, string singerName);
+    void update(const string& songName, int songLength, const string& singerName);
     string state() const;
     string song() const;
     int timeLength() const;
@@ -63,7 +63,7 @@ private :
 // NO OTHER METHODS SHOULD APPEAR HERE.
 // NO friend is allowed here.
 public :
-    explicit Voter(string originState, VoterType voterType=Regular); // implement numOfVotes=0
+    explicit Voter(const string& originState, VoterType voterType=Regular); // implement numOfVotes=0
     string state() const;
     VoterType voterType() const;
     int timesOfVotes() const;
@@ -81,8 +81,9 @@ struct Vote
 // NO NEED to define anything else.
     Voter& voter;
     string* selectedStates;
-    Vote(Voter& voter, string state1, string state2="", string state3="", string state4="", string state5="",
-         string state6="", string state7="", string state8="", string state9="", string state10="");
+    Vote(Voter& voter, const string& state1, const string& state2="", const string& state3="", const string& state4="",
+         const string& state5="", const string& state6="", const string& state7="", const string& state8="",
+         const string& state9="", const string& state10="");
     Vote(const Vote&) = default;
     ~Vote();
 };
@@ -119,11 +120,12 @@ private :
     int maxSongLength;
     int maxParticipants;
     int maxRegularTimesToVote;
-    bool isStateExist(string stateName);
+    bool isStateExist(const string& stateName);
     int getFirstEmptyIndex();
     int getParticipantIndexByStateName(string stateName) const;
     void sortParticipantsByStateNames();
     void swapParticipantsByIndex(int participant1,int participant2);
+    int getParticipantIndex(const Participant& participant);
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.
@@ -135,7 +137,7 @@ public :
     void setPhase(Phase phase);
     MainControl& operator-=(const Participant& participant);
     bool legalParticipant(const Participant& participant) const ;
-    bool participate(string stateName) const ;
+    bool participate(const string& stateName) const ;
     ~MainControl();
     friend ostream& operator<<(ostream& os, MainControl& mainControl);
 };

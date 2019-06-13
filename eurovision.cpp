@@ -26,7 +26,7 @@ MainControl& MainControl::operator+=(Participant& participant){
 }
 
 MainControl& MainControl::operator+=(Vote vote){
-    if(this->phase!=Voting){
+    if(this->phase!=Voting || !(this->isStateExist(vote.voter.state()))){
         return *this;
     }
     if(vote.voter.voterType()==Regular && vote.voter.timesOfVotes() < this->maxRegularTimesToVote){
@@ -39,7 +39,7 @@ MainControl& MainControl::operator+=(Vote vote){
             ++(vote.voter);
         }
     }
-    if(vote.voter.voterType()==Judge && vote.voter.timesOfVotes() < 1){
+    if(vote.voter.voterType()==Judge && vote.voter.timesOfVotes() < 1 ){
         for(int i=0;i<MAX_JUDGE_VOTES;i++){
             if(vote.selectedStates[i] != vote.voter.state()){
                 int index = this->getParticipantIndexByStateName(vote.selectedStates[i]);
@@ -61,11 +61,21 @@ void MainControl::setPhase(Phase phase){
 
 }
 
+int MainControl::getParticipantIndex(const Participant& participant){
+    for (int i=0; i<this->maxParticipants; i++) {
+        if (this->participantScores[i].getParticipant() == &participant) {
+            return i;
+        }
+    }
+    return NOT_IN_ARRAY;
+}
+
+
 MainControl& MainControl::operator-=(const Participant& participant){
     if(this->phase != Registration){
         return *this;
     }
-    int index = this->getParticipantIndexByStateName(participant.state());
+    int index = this->getParticipantIndex(participant);
     if(index >= 0){
         this->participantScores[index].setParticipant(nullptr);
         this->participantScores[index].resetVotes();
@@ -77,7 +87,7 @@ MainControl::~MainControl(){
     delete[] this->participantScores;
 }
 
-bool MainControl::isStateExist(string stateName){
+bool MainControl::isStateExist(const string& stateName){
     return (this->getParticipantIndexByStateName(stateName) >= 0);
 }
 int MainControl::getFirstEmptyIndex(){
@@ -104,7 +114,7 @@ bool MainControl::legalParticipant(const Participant& participant) const{
     }
     return true;
 }
-bool MainControl::participate(string stateName) const{
+bool MainControl::participate(const string& stateName) const{
     return (this->getParticipantIndexByStateName(stateName)>=0);
 }
 
@@ -171,7 +181,7 @@ Participant::Participant(const string& stateName, const string& songName,int son
     this->registered= false;
 }
 
-void Participant::update(string songName, int songLength, string singerName){
+void Participant::update(const string& songName, int songLength, const string& singerName){
     if (!this->registered){
         if(songName!="") this->songName=songName;
         if(songLength != 0) this->songLength=songLength;
@@ -211,7 +221,7 @@ ostream& operator<<(ostream& os, const Participant& participant){
 
 //*************************Voter**************************************
 
-Voter::Voter(string originState, VoterType voterType){
+Voter::Voter(const string& originState, VoterType voterType){
     this->originState=originState;
     this->typeOfVoter=voterType;
     this->numOfVotes=0;
@@ -247,8 +257,9 @@ ostream& operator<<(ostream& os, const Voter& voter){
 
 //*************************Vote**************************************
 
-Vote::Vote(Voter& voter, string state1, string state2, string state3, string state4, string state5,
-        string state6, string state7, string state8, string state9, string state10):
+Vote::Vote(Voter& voter, const string& state1, const string& state2, const string& state3, const string& state4,
+        const string& state5, const string& state6, const string& state7, const string& state8, const string& state9,
+           const string& state10):
         voter(voter),selectedStates(new string[MAX_JUDGE_VOTES]) {
     this->selectedStates[0]=state1;
     this->selectedStates[1]=state2;
