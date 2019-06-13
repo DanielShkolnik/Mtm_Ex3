@@ -1,10 +1,12 @@
 
 #include "eurovision.h"
 
+const int MAX_JUDGE_VOTES=10;
+const int FULL=-1;
+const int NOT_IN_ARRAY=-1;
+
 //*************************MAIN CONTROL**************************************
-#define MAX_JUDGE_VOTES 10
-#define FULL -1
-#define NOT_IN_ARRAY -1
+
 MainControl::MainControl(int maxSongLength, int maxParticipants, int maxRegularTimesToVote):
                         phase(Registration),participantScores(new ParticipantScore[maxParticipants]){
     this->maxSongLength=maxSongLength;
