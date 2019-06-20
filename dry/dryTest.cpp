@@ -3,48 +3,43 @@
 #include <assert.h>
 #include <string.h>
 using std::string;
-/*
-template <class container,class Compare>
-int countPairs(container first, const container last, Compare compare) {
-   //add here your first function
-}
- */
-//**********************************
-
+//**********************************************************************************************************
 template <class Iterator,class Predicate>
 int countPairs(Iterator first, Iterator last, Predicate predicate){
     int count = 0;
-    for(Iterator i = first; i != last;++i){
-        Iterator j = i;
+    for(Iterator i=first; i!=last; ++i){
+        Iterator j=i;
         ++j;
-        while (j != last){
+        while (j!=last){
             if(predicate(*i,*j) || predicate(*j,*i)){
                 count++;
             }
-            j++;
+            ++j;
         }
     }
     return count;
 }
 
-//**********************************
-bool compare(int x1,int x2){
-    return x1<x2;
-}
-
-bool predict(int i, int j){
-    return (i<0 || j<0);
+bool predict(int num1, int num2){
+    return (num1<0 || num2<0);
 }
 
 bool isSorted(std::vector<int> v){
     std::vector<int> difference;
-    for(auto i = v.begin(); i!=v.end()-1;i++){
+    for(auto i=v.begin(); i!=(v.end()-1); i++){
         difference.push_back(*(i+1)-*i);
     }
     difference.push_back(0);
-    int pairsCount = countPairs(difference.begin(),difference.end(),predict);
-    return pairsCount == 0;
+    int pairsCount=countPairs(difference.begin(),difference.end(),predict);
+    return pairsCount==0;
 }
+
+//**********************************************************************************************************
+
+bool compare(int x1,int x2){
+    return x1<x2;
+}
+
 
 bool compareint2(int x1,int x2){
     return x2<x1;
