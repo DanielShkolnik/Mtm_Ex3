@@ -329,3 +329,20 @@ ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
     return os << participantScore.participant->state() << " : Regular(" << participantScore.regularVotes << ") Judge("
     << participantScore.judgeVotes << ")";
 }
+
+
+//*************************Get_Function******************************************************
+
+template <class Iterator>
+Iterator get(Iterator first, Iterator last, int i){
+    std::vector<*Iterator> places;
+    for(Iterator it1=first; it!=last; ++it){
+        int maxIndex=
+        for(Iterator it2=(++it1); it2!=last; ++it2){
+
+        }
+    }
+
+
+
+}
