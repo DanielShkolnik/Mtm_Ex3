@@ -17,17 +17,19 @@ int countPairs(Iterator first, Iterator last, Predicate predicate){
     if(first==last) return 0;
     for(Iterator i = first; i != last;){
         Iterator j = ++i;
-        for(; j !=last;++j){
+        while (j !=last){
+            if(predicate(*i,*j) || predicate(*j,*i)){
+                count++;
+            }
+            ++j;
+        }
+        if(j==last){
             if(predicate(*i,*j) || predicate(*j,*i)){
                 count++;
             }
         }
-        if(j==last){
-            if(predicate(*i,*j)){
-                count++;
-            }
-        }
     }
+    return count;
 }
 
 //**********************************
@@ -40,14 +42,14 @@ bool predict(int i, int j){
 }
 
 bool isSorted(std::vector<int> v){
-    std::vector<int> difference((v.size()/2)+1);
-    auto i = v.begin();
-    auto j = v.begin();
-    for(; i != v.end();++i){
-        difference.push_back(*(++j) - *i);
+    std::vector<int> difference;
+    for(auto i = v.begin(); i!=v.end();i++){
+
+    }
+    for(auto k = v.begin(); k != v.end();++k){
+        std::cout<< *k << std::endl;
     }
     countPairs(difference.begin(),difference.end(),predict);
-
 }
 
 bool compareint2(int x1,int x2){
@@ -88,7 +90,8 @@ void TEST1(){
     check.push_back(53);
     check.push_back(64);
     int success=1;
-    if(countPairs(check.begin(), check.end(), compare)!=66) success=0;
+    int test1 = countPairs(check.begin(), check.end(), compare);
+    if(test1!=66) success=0;
     if (isSorted(check)!=1) success=0;
     std::cout<<(success?"SUCCESS":"FAILED")<<std::endl;
 }
