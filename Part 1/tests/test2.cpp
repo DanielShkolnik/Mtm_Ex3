@@ -13,7 +13,7 @@ using std::endl;
 
 
 void TEST2 (){
-    freopen ("../tests/test2myresult.txt","w",stdout);
+    freopen ("./tests/test2myresult.txt","w",stdout);
     MainControl eurovision;
     Participant p1("croatia","song_croatia",112,"singer_croatia");
     cout<<p1<<endl;
