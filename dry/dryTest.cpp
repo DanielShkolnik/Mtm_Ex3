@@ -14,19 +14,14 @@ int countPairs(container first, const container last, Compare compare) {
 template <class Iterator,class Predicate>
 int countPairs(Iterator first, Iterator last, Predicate predicate){
     int count = 0;
-    if(first==last) return 0;
-    for(Iterator i = first; i != last;){
-        Iterator j = ++i;
-        while (j !=last){
+    for(Iterator i = first; i != last;++i){
+        Iterator j = i;
+        ++j;
+        while (j != last){
             if(predicate(*i,*j) || predicate(*j,*i)){
                 count++;
             }
-            ++j;
-        }
-        if(j==last){
-            if(predicate(*i,*j) || predicate(*j,*i)){
-                count++;
-            }
+            j++;
         }
     }
     return count;
@@ -38,18 +33,17 @@ bool compare(int x1,int x2){
 }
 
 bool predict(int i, int j){
-    return (i>0 && j>0);
+    return (i<0 || j<0);
 }
 
 bool isSorted(std::vector<int> v){
     std::vector<int> difference;
-    for(auto i = v.begin(); i!=v.end();i++){
-
+    for(auto i = v.begin(); i!=v.end()-1;i++){
+        difference.push_back(*(i+1)-*i);
     }
-    for(auto k = v.begin(); k != v.end();++k){
-        std::cout<< *k << std::endl;
-    }
-    countPairs(difference.begin(),difference.end(),predict);
+    difference.push_back(0);
+    int pairsCount = countPairs(difference.begin(),difference.end(),predict);
+    return pairsCount == 0;
 }
 
 bool compareint2(int x1,int x2){
