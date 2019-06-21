@@ -62,11 +62,11 @@ int main()
   Participant p4("Australia","Song_Australia",180,"Singer_Australia");
   Participant p5("Cyprus","Song_Cyprus",172,"Singer_Cyprus");
 
-// Participant p11(p1);  // compilation error. every potential participant
+//  Participant p11(p1);  // compilation error. every potential participant
                           //  is unique as an object. Can not be copied from
                           //  another participant.*/
 
-// Participant p12; // compilation error. Must give values to all features.
+//  Participant p12; // compilation error. Must give values to all features.
 //  Participant p13("","",0,""); // OK for here. This is not legal initialization,
                                  // however, there are values for all 4 basic features
                                  // and still p13 is not yet registered in the system,
@@ -211,8 +211,8 @@ TEST("1.7")
 
 
 TEST("1.8")
-cout << eurovision.legalParticipant(p1); // will display 1 (bool)
-cout << eurovision.legalParticipant(p3); // will display 0 (false)
+cout << eurovision.legalParticipant(p1) << endl; // will display 1 (bool)
+cout << eurovision.legalParticipant(p3) << endl; // will display 0 (false)
 
 /* the operation legalParticipant checks if all the following exists :
    the names of the state and the song and the singer are not empty "",
@@ -223,11 +223,13 @@ cout << eurovision.legalParticipant(p3); // will display 0 (false)
 
 TEST("1.9")
   cout << p2 << endl;
-  p2.update("", 169, "");  // Already registered cannot change after Registered==True
+  p2.update("", 169, "");  // can not be done. p2 is registered in the system,
+                           // therefore can not be updated.
   cout << p2  << endl;
 
   cout << p3  << endl;
-  p3.update("", 179, "");  // Will update
+  p3.update("", 179, "");  // p3 is not registered in the system, therefore
+                           // the update here succeeds.
   cout << p3  << endl;
 
   eurovision += p3; //can not be done. it's not Registration phase.
@@ -336,7 +338,10 @@ TEST("1.15")
   cout << eurovision << endl;
 
 TEST("1.16")
-  eurovision += Vote(vr5, "Cyprus"); /* Not counted. vr5 has already exceeded max allowed times for voting */
+  eurovision += Vote(vr5, "Cyprus"); /* This vote succeeds. Only 3 of the former 5 votes of vr5 have been suceeded
+                                        (vr5 can not vote for his own country Australia). Therefore still has not
+                                        reached the max allowed times of voting. Till now only 3. So this vote succeeds
+                                        and counts as 4th vote of vr5 */
   cout << eurovision << endl;
 
 TEST("1.17")

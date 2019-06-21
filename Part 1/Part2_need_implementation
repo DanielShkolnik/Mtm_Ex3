@@ -1,0 +1,27 @@
+MainControl::Iterator{
+private:
+int index
+
+public:
+operator ++(left)
+operator <
+operator *(dereference)
+operator ==
+delete operator --(left)
+}
+
+MainControl{
+private:
+bool predicateByJudge(ParticipantScores p1, ParticipantScores p2) - אם הניקוד שווה משווים את שמות המדינות ובוחרים בשם המדינה הגדול יותר (לא הקטן כמו קודם)
+bool predicateByRegular(ParticipantScores p1, ParticipantScores p2)
+bool predicateByAll(ParticipantScores p1, ParticipantScores p2)
+
+public:
+operator -= - לשנות את המימוש כך שלאחר כל הסרת איבר להזיז את שאר האיברים כך שלא יווצרו חורים במערך
+Iterator begin() - ממין את איברי המערך לפי שמות המדינות המשתתפות
+Iterator end() const - איבר אחד אחרי האיבר האחרון במערך
+string operator ()(int place, VoterType voterType) - אם אין מקום כזה אז מחזירים מחרוזת ריקה "" הפונקציה מחזירה את שם המדינה המתאימה
+}
+
+Iterator get(Iterator begin, Iterator end, Predicate predicate) - אם לא קיים איבר מתאים מחזירים את האיבר אחד אחרי האחרון
+
