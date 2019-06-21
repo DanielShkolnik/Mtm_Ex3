@@ -106,7 +106,7 @@ public:
     void addRegularVote();
     void addJudgeVote(int place);
     void resetVotes();
-    const Participant* getParticipant();
+    Participant* getParticipant();
     ~ParticipantScore()= default;
     friend ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
 };
@@ -142,8 +142,27 @@ public :
     bool participate(const string& stateName) const ;
     ~MainControl();
     friend ostream& operator<<(ostream& os, MainControl& mainControl);
-};
+    class Iterator{
+    public:
+        Iterator();
+        explicit Iterator(ParticipantScore* participantScore);
+        Iterator(const Iterator&) = default;
+        ~Iterator() = default;
+        Iterator& operator=(const Iterator& iterator) = default;
+        Iterator& operator++();
+        Iterator&operator--() = delete;
+        friend bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
+        Participant& operator*();
+        friend bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
 
+    private:
+        ParticipantScore* participantScore;
+    };
+    Iterator begin();
+    Iterator end();
+};
+bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
+bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
 ostream& operator<<(ostream& os, const MainControl& mainControl);
 
 // -----------------------------------------------------------

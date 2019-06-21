@@ -82,6 +82,7 @@ MainControl& MainControl::operator-=(const Participant& participant){
         this->participantScores[index].setParticipant(nullptr);
         this->participantScores[index].resetVotes();
     }
+    this->sortParticipantsByStateNames();
     return *this;
 }
 
@@ -171,7 +172,32 @@ ostream& operator<<(ostream& os, MainControl& mainControl){
 
     return os;
 }
+MainControl::Iterator MainControl::begin(){
+    return MainControl::Iterator(this->participantScores);
+}
 
+MainControl::Iterator MainControl::end(){
+    return MainControl::Iterator(&this->participantScores[this->getFirstEmptyIndex()]);
+}
+//************************ Iterator *****************************************
+MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScore(participantScore){}
+MainControl::Iterator::Iterator():participantScore(nullptr){}
+
+MainControl::Iterator&  MainControl::Iterator::operator++(){
+    this->participantScore++;
+    return *this;
+}
+bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
+    return iterator1.participantScore < iterator2.participantScore;
+}
+
+Participant& MainControl::Iterator::operator*(){
+    return *(participantScore->getParticipant());
+}
+
+bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
+    return iterator1.participantScore == iterator2.participantScore;
+}
 //*************************Participant**************************************
 
 Participant::Participant(const string& stateName, const string& songName,int songLength,
@@ -321,7 +347,7 @@ void ParticipantScore::resetVotes(){
     this->judgeVotes=0;
 }
 
-const Participant* ParticipantScore::getParticipant(){
+Participant* ParticipantScore::getParticipant(){
     return this->participant;
 }
 
@@ -333,9 +359,21 @@ ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
 
 //*************************Get_Function******************************************************
 
-template <class Container>
-typename Container::Iterator get(typename Container::Iterator first, typename Container::Iterator last, int i){
-    std::vector<typename Container::value_type> places(first,last);
-    std::sort(places.begin(),places.end(),std::greater<typename Container::value_type>());
-    return (places.begin()+i);
+template <class Iterator, class Predicate>
+Iterator get(Iterator begin, Iterator end,Predicate predicate,int i){
+    std::vector<Iterator> places;
+    for(Iterator j = begin; j < end; ++j){
+        places.push_back(j);
+    }
+
+    for(auto j = places.begin(); j < places.end(); ++j){
+        auto max = j;
+        for(auto k = j+1; k< places.end();++k){
+            if(predicate(**k,**j)){
+                max = k;
+            }
+        }
+        places.swap(j,max);
+    }
+    return places.begin() + i;
 }
