@@ -182,15 +182,25 @@ MainControl::Iterator MainControl::end(){
 
 
 bool MainControl::predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    if (participantScore1.getJudgeVote()==participantScore2.getJudgeVote()){
+        return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
+    }
     return participantScore1.getJudgeVote()>participantScore2.getJudgeVote();
 }
 
 bool MainControl::predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    if (participantScore1.getRegularVote()==participantScore2.getRegularVote()){
+        return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
+    }
     return participantScore1.getRegularVote()>participantScore2.getRegularVote();
 }
 bool MainControl::predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
-    return (participantScore1.getJudgeVote()+participantScore1.getRegularVote())>
-    (participantScore2.getJudgeVote()+participantScore2.getRegularVote());
+    int participantScore1All=participantScore1.getJudgeVote()+participantScore1.getRegularVote();
+    int participantScore2All=participantScore2.getJudgeVote()+participantScore2.getRegularVote();
+    if (participantScore1All==participantScore2All){
+        return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
+    }
+    return participantScore1All>participantScore2All;
 }
 
 //************************ Iterator *****************************************
