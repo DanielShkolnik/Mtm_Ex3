@@ -24,7 +24,7 @@ public:
     virtual string location(){
         return  "line: " + std::to_string(this->line) + ", chair: " + std::to_string(this->chair);
     };
-    virtual ~Seat(){};
+    virtual ~Seat()= default;
 
 protected:
     int line;
@@ -45,6 +45,7 @@ public:
     string location() override{
         return  "Green Room-> " + Seat::location();
     }
+    ~GreenRoomSeat() override= default;
 
 };
 
@@ -79,6 +80,7 @@ public:
     int price() override{
         return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+SpecialSeat::specialSeatPrice+goldenCircleSeatPrice);
     }
+    ~GoldenCircleSeat() override= default;
 };
 
 // ---------------------------------------------
@@ -94,6 +96,7 @@ public:
     int price() override{
         return disablePodiumSeatPrice;
     }
+    ~DisablePodiumSeat() override= default;
 };
 
 // ---------------------------------------------
@@ -104,7 +107,7 @@ private:
 public:
     RegularSeat(char area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
     string location() override{
-        return  "area: " + std::basic_string.append(this->area) + Seat::location();
+        return  "area: " + std::to_string(this->area) + Seat::location();    //"area: " + this->area + Seat::location();
     };
 };
 
@@ -121,6 +124,7 @@ public:
     int price() override{
         return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+frontRegularSeatPrice);
     }
+    ~FrontRegularSeat() override= default;
 };
 
 // ---------------------------------------------
@@ -136,6 +140,7 @@ public:
     int price() override{
         return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+middleRegularSeatPrice);
     }
+    ~MiddleRegularSeat() override= default;
 };
 
 // ---------------------------------------------
@@ -149,6 +154,7 @@ public:
     int price() override{
         return (Seat::basePrice+MainHallSeat::mainHallSeatPrice);
     }
+    ~RearRegularSeat() override= default;
 };
 
 // ---------------------------------------------
