@@ -179,6 +179,16 @@ MainControl::Iterator MainControl::begin(){
 MainControl::Iterator MainControl::end(){
     return MainControl::Iterator(&this->participantScores[this->getFirstEmptyIndex()]);
 }
+
+
+bool MainControl::predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    return participantScore1.getJudgeVote()>participantScore2.getJudgeVote();
+}
+
+bool predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+bool predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+
+
 //************************ Iterator *****************************************
 MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScore(participantScore){}
 MainControl::Iterator::Iterator():participantScore(nullptr){}
@@ -356,6 +366,13 @@ ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
     << participantScore.judgeVotes << ")";
 }
 
+int ParticipantScore::getRegularVote(){
+    return this->regularVotes;
+}
+
+int ParticipantScore::getJudgeVote(){
+    return this->judgeVotes;
+}
 
 //*************************Get_Function******************************************************
 

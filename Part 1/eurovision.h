@@ -109,6 +109,8 @@ public:
     Participant* getParticipant();
     ~ParticipantScore()= default;
     friend ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
+    int getRegularVote();
+    int getJudgeVote();
 };
 ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
 // -----------------------------------------------------------
@@ -128,6 +130,9 @@ private :
     void sortParticipantsByStateNames();
     void swapParticipantsByIndex(int participant1,int participant2);
     int getParticipantIndex(const Participant& participant);
+    bool predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+    bool predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+    bool predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.
