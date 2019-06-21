@@ -333,16 +333,9 @@ ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
 
 //*************************Get_Function******************************************************
 
-template <class Iterator>
-Iterator get(Iterator first, Iterator last, int i){
-    std::vector<*Iterator> places;
-    for(Iterator it1=first; it!=last; ++it){
-        int maxIndex=
-        for(Iterator it2=(++it1); it2!=last; ++it2){
-
-        }
-    }
-
-
-
+template <class Container>
+typename Container::Iterator get(typename Container::Iterator first, typename Container::Iterator last, int i){
+    std::vector<typename Container::value_type> places(first,last);
+    std::sort(places.begin(),places.end(),std::greater<typename Container::value_type>());
+    return (places.begin()+i);
 }
