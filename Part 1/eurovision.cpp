@@ -193,7 +193,6 @@ bool MainControl::predicateByAll(const ParticipantScore& participantScore1, cons
     (participantScore2.getJudgeVote()+participantScore2.getRegularVote());
 }
 
-
 //************************ Iterator *****************************************
 MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScore(participantScore){}
 MainControl::Iterator::Iterator():participantScore(nullptr){}

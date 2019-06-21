@@ -12,9 +12,9 @@ delete operator --(left)
 
 MainControl{
 private:
-bool predicateByJudge(ParticipantScores p1, ParticipantScores p2) - אם הניקוד שווה משווים את שמות המדינות ובוחרים בשם המדינה הגדול יותר (לא הקטן כמו קודם)
-bool predicateByRegular(ParticipantScores p1, ParticipantScores p2)
-bool predicateByAll(ParticipantScores p1, ParticipantScores p2)
+(V) bool predicateByJudge(ParticipantScores p1, ParticipantScores p2) - אם הניקוד שווה משווים את שמות המדינות ובוחרים בשם המדינה הגדול יותר (לא הקטן כמו קודם)
+(V) bool predicateByRegular(ParticipantScores p1, ParticipantScores p2)
+(V) bool predicateByAll(ParticipantScores p1, ParticipantScores p2)
 
 public:
 (V) operator -= - לשנות את המימוש כך שלאחר כל הסרת איבר להזיז את שאר האיברים כך שלא יווצרו חורים במערך
