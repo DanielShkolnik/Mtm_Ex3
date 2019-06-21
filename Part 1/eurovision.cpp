@@ -371,7 +371,7 @@ void ParticipantScore::resetVotes(){
     this->judgeVotes=0;
 }
 
-Participant* ParticipantScore::getParticipant(){
+Participant* ParticipantScore::getParticipant() const{
     return this->participant;
 }
 

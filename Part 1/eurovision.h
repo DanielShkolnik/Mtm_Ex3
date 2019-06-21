@@ -106,7 +106,7 @@ public:
     void addRegularVote();
     void addJudgeVote(int place);
     void resetVotes();
-    Participant* getParticipant();
+    Participant* getParticipant() const;
     ~ParticipantScore()= default;
     friend ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
     int getRegularVote() const;
