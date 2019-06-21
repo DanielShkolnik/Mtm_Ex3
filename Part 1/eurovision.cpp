@@ -185,8 +185,13 @@ bool MainControl::predicateByJudge(const ParticipantScore& participantScore1, co
     return participantScore1.getJudgeVote()>participantScore2.getJudgeVote();
 }
 
-bool predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
-bool predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+bool MainControl::predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    return participantScore1.getRegularVote()>participantScore2.getRegularVote();
+}
+bool MainControl::predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    return (participantScore1.getJudgeVote()+participantScore1.getRegularVote())>
+    (participantScore2.getJudgeVote()+participantScore2.getRegularVote());
+}
 
 
 //************************ Iterator *****************************************
@@ -366,11 +371,11 @@ ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
     << participantScore.judgeVotes << ")";
 }
 
-int ParticipantScore::getRegularVote(){
+int ParticipantScore::getRegularVote() const{
     return this->regularVotes;
 }
 
-int ParticipantScore::getJudgeVote(){
+int ParticipantScore::getJudgeVote() const{
     return this->judgeVotes;
 }
 

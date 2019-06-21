@@ -109,8 +109,8 @@ public:
     Participant* getParticipant();
     ~ParticipantScore()= default;
     friend ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
-    int getRegularVote();
-    int getJudgeVote();
+    int getRegularVote() const;
+    int getJudgeVote() const;
 };
 ostream& operator<<(ostream& os, const ParticipantScore& participantScore);
 // -----------------------------------------------------------
