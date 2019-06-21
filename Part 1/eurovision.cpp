@@ -165,7 +165,9 @@ ostream& operator<<(ostream& os, MainControl& mainControl){
             if(mainControl.participantScores[i].getParticipant() == nullptr){
                 break;
             }
-            os << mainControl.participantScores[i] << endl;
+            //os << mainControl.participantScores[i] << endl;
+            os << mainControl.participantScores[i].getParticipant()->state() << " : Regular(" << mainControl.participantScores[i].getRegularVote()
+            << ") Judge(" << mainControl.participantScores[i].getJudgeVote() << ")" << endl;
         }
     }
     os << "}" << endl;
@@ -179,22 +181,33 @@ MainControl::Iterator MainControl::begin(){
 MainControl::Iterator MainControl::end(){
     return MainControl::Iterator(&this->participantScores[this->getFirstEmptyIndex()]);
 }
+//***********************************Predicate******************************************************
 
+MainControl::predicate::predicate(VoterType voterType):voterType(voterType){}
+bool MainControl::predicate::operator()(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+    if(this->voterType==Regular){
+        return this->predicateByRegular(participantScore1,participantScore2);
+    }
+    if(this->voterType==Judge){
+        return this->predicateByJudge(participantScore1,participantScore2);
+    }
+    return this->predicateByAll(participantScore1,participantScore2);
+}
 
-bool MainControl::predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+bool MainControl::predicate::predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
     if (participantScore1.getJudgeVote()==participantScore2.getJudgeVote()){
         return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
     }
     return participantScore1.getJudgeVote()>participantScore2.getJudgeVote();
 }
 
-bool MainControl::predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+bool MainControl::predicate::predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
     if (participantScore1.getRegularVote()==participantScore2.getRegularVote()){
         return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
     }
     return participantScore1.getRegularVote()>participantScore2.getRegularVote();
 }
-bool MainControl::predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
+bool MainControl::predicate::predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
     int participantScore1All=participantScore1.getJudgeVote()+participantScore1.getRegularVote();
     int participantScore2All=participantScore2.getJudgeVote()+participantScore2.getRegularVote();
     if (participantScore1All==participantScore2All){
@@ -203,24 +216,43 @@ bool MainControl::predicateByAll(const ParticipantScore& participantScore1, cons
     return participantScore1All>participantScore2All;
 }
 
+string  MainControl::operator()(int i, VoterType voterType){
+    MainControl::Iterator iterator;
+    if(voterType==Regular){
+        MainControl::predicate predicate1(Regular);
+        iterator = get(this->begin(),this->end(),predicate1,i);
+    }
+    if(voterType==Judge){
+        MainControl::predicate predicate2(Judge);
+        iterator = get(this->begin(),this->end(),predicate2,i);
+    }
+    if(voterType==All){
+        MainControl::predicate predicate3(All);
+        iterator = get(this->begin(),this->end(),predicate3,i);
+    }
+    if(iterator==this->end()) return "";
+    return (*iterator).getParticipant()->state();
+}
+
+
 //************************ Iterator *****************************************
-MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScore(participantScore){}
-MainControl::Iterator::Iterator():participantScore(nullptr){}
+MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScorePtr(participantScore){}
+MainControl::Iterator::Iterator():participantScorePtr(nullptr){}
 
 MainControl::Iterator&  MainControl::Iterator::operator++(){
-    this->participantScore++;
+    this->participantScorePtr++;
     return *this;
 }
 bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
-    return iterator1.participantScore < iterator2.participantScore;
+    return iterator1.participantScorePtr < iterator2.participantScorePtr;
 }
 
-Participant& MainControl::Iterator::operator*(){
-    return *(participantScore->getParticipant());
+ParticipantScore& MainControl::Iterator::operator*(){
+    return *(participantScorePtr);
 }
 
 bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
-    return iterator1.participantScore == iterator2.participantScore;
+    return iterator1.participantScorePtr == iterator2.participantScorePtr;
 }
 //*************************Participant**************************************
 
@@ -376,8 +408,9 @@ Participant* ParticipantScore::getParticipant() const{
 }
 
 ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
-    return os << participantScore.participant->state() << " : Regular(" << participantScore.regularVotes << ") Judge("
-    << participantScore.judgeVotes << ")";
+    //return os << participantScore.participant->state() << " : Regular(" << participantScore.regularVotes << ") Judge("
+    //<< participantScore.judgeVotes << ")";
+    return  os << *participantScore.getParticipant();
 }
 
 int ParticipantScore::getRegularVote() const{
@@ -390,21 +423,5 @@ int ParticipantScore::getJudgeVote() const{
 
 //*************************Get_Function******************************************************
 
-template <class Iterator, class Predicate>
-Iterator get(Iterator begin, Iterator end,Predicate predicate,int i){
-    std::vector<Iterator> places;
-    for(Iterator j = begin; j < end; ++j){
-        places.push_back(j);
-    }
 
-    for(auto j = places.begin(); j < places.end(); ++j){
-        auto max = j;
-        for(auto k = j+1; k< places.end();++k){
-            if(predicate(**k,**j)){
-                max = k;
-            }
-        }
-        places.swap(j,max);
-    }
-    return places.begin() + i;
-}
+

@@ -130,9 +130,17 @@ private :
     void sortParticipantsByStateNames();
     void swapParticipantsByIndex(int participant1,int participant2);
     int getParticipantIndex(const Participant& participant);
-    bool predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
-    bool predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
-    bool predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+    class predicate{
+    public:
+        explicit predicate(VoterType voterType);
+        bool operator()(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+    private:
+        VoterType voterType;
+        bool predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+        bool predicateByRegular(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+        bool predicateByAll(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2);
+
+    };
 // need to define here possibly c'tr and d'tr and ONLY methods that
 // are mentioned and demonstrated in the test example that has been published.
 // NO OTHER METHODS SHOULD APPEAR HERE.
@@ -157,10 +165,11 @@ public :
         Iterator& operator++();
         Iterator&operator--() = delete;
         friend bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
-        Participant& operator*();
+        ParticipantScore& operator*();
         friend bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
     private:
-        ParticipantScore* participantScore;
+        ParticipantScore* participantScorePtr;
+        bool internal;
     };
     Iterator begin();
     Iterator end();
@@ -169,6 +178,30 @@ public :
 bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
 bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
 ostream& operator<<(ostream& os, const MainControl& mainControl);
+
+//*************************Get_Function******************************************************
+template <class Iterator, class Predicate>
+Iterator get(Iterator begin, Iterator end,Predicate predicate,int i){
+    std::vector<Iterator> places;
+    for(Iterator j = begin; j < end; ++j){
+        places.push_back(j);
+    }
+
+    for(auto j = places.begin(); j < places.end(); ++j){
+        auto max = j;
+        for(auto k = j+1; k< places.end();++k){
+            if(predicate(**k,**max)){
+                max = k;
+            }
+        }
+        //std::swap(j,max);
+        Iterator temp = *j;
+        *j = *max;
+        *max = temp;
+    }
+    if(i > places.size()) return end;
+    return *(places.begin() + (i-1));
+}
 
 // -----------------------------------------------------------
 
