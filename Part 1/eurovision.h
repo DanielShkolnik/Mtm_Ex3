@@ -154,12 +154,12 @@ public :
         friend bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
         Participant& operator*();
         friend bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
-
     private:
         ParticipantScore* participantScore;
     };
     Iterator begin();
     Iterator end();
+    string operator()(int i, VoterType voterType);
 };
 bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
 bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
