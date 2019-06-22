@@ -12,7 +12,7 @@ class NoPrice: public exception
 {
 public:
     const char* what() const noexcept override{
-        return  "Not For Sale !\n";
+        return  "Not For Sale !";
     }
 };
 
@@ -103,11 +103,11 @@ public:
 class RegularSeat:public MainHallSeat
 {
 private:
-    const string& area;
+    const char& area;
 public:
-    RegularSeat(const string& area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
+    RegularSeat(const char& area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
     string location() override{
-        return  "area: " + this->area + " " + Seat::location();    //"area: " + this->area + Seat::location();
+        return  "area: " + string(1,this->area) + ", " + Seat::location();    //"area: " + this->area + Seat::location();
     };
 };
 
@@ -117,7 +117,7 @@ class FrontRegularSeat:public RegularSeat
 private:
     int const frontRegularSeatPrice=500;
 public:
-    FrontRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(&area,line,chair,basePrice){}
+    FrontRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
         return  "Front-> " + RegularSeat::location();
     }
@@ -133,7 +133,7 @@ class MiddleRegularSeat:public RegularSeat
 private:
     int const middleRegularSeatPrice=250;
 public:
-    MiddleRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(&area,line,chair,basePrice){}
+    MiddleRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
         return  "Middle-> " + RegularSeat::location();
     }
@@ -147,9 +147,9 @@ public:
 class RearRegularSeat:public RegularSeat
 {
 public:
-    RearRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(&area,line,chair,basePrice){}
+    RearRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
-        return  "Middle-> " + RegularSeat::location();
+        return  "Rear-> " + RegularSeat::location();
     }
     int price() override{
         return (Seat::basePrice+MainHallSeat::mainHallSeatPrice);
