@@ -2,7 +2,7 @@
 
 const int NO_PRICE=0;
 
-const char* NoPrice::what() const noexcept override{
+const char* NoPrice::what() const noexcept{
 return  "Not For Sale !";
 }
 
@@ -13,10 +13,10 @@ virtual string Seat::location(){
 Seat::Seat(int line, int chair, int basePrice=NO_PRICE): line(line), chair(chair), basePrice(basePrice){}
 
 GreenRoomSeat::GreenRoomSeat(int line, int chair): Seat(line,chair){}
-int GreenRoomSeat::price() override{
+int GreenRoomSeat::price() {
 throw NoPrice();
 }
-string GreenRoomSeat::location() override{
+string GreenRoomSeat::location() {
 return  "Green Room-> " + Seat::location();
 }
 
@@ -25,47 +25,47 @@ MainHallSeat::MainHallSeat(int line, int chair, int basePrice):Seat(line,chair,b
 SpecialSeat::SpecialSeat(int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice){}
 
 GoldenCircleSeat::GoldenCircleSeat(int line, int chair, int basePrice):SpecialSeat(line,chair,basePrice){}
-string GoldenCircleSeat::location() override{
+string GoldenCircleSeat::location() {
 return  "Golden Circle-> " + Seat::location();
 }
-int GoldenCircleSeat::price() override{
+int GoldenCircleSeat::price() {
 return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+SpecialSeat::specialSeatPrice+goldenCircleSeatPrice);
 }
 
 DisablePodiumSeat::DisablePodiumSeat(int line, int chair, int basePrice=NO_PRICE):SpecialSeat(line,chair,basePrice){}
-string DisablePodiumSeat::location() override{
+string DisablePodiumSeat::location() {
 return  "Disable Podium-> " + Seat::location();
 }
-int DisablePodiumSeat::price() override{
+int DisablePodiumSeat::price() {
 return disablePodiumSeatPrice;
 }
 
 RegularSeat::RegularSeat(const char& area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
-string RegularSeat::location() override{
+string RegularSeat::location() {
 return  "area: " + string(1,this->area) + ", " + Seat::location();
 }
 
 FrontRegularSeat::FrontRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
-string FrontRegularSeat::location() override{
+string FrontRegularSeat::location() {
 return  "Front-> " + RegularSeat::location();
 }
-int FrontRegularSeat::price() override{
+int FrontRegularSeat::price() {
 return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+frontRegularSeatPrice);
 }
 
 MiddleRegularSeat::MiddleRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
-string MiddleRegularSeat::location() override{
+string MiddleRegularSeat::location() {
 return  "Middle-> " + RegularSeat::location();
 }
-int MiddleRegularSeat::price() override{
+int MiddleRegularSeat::price() {
 return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+middleRegularSeatPrice);
 }
 
 RearRegularSeat::RearRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
-string RearRegularSeat::location() override{
+string RearRegularSeat::location() {
 return  "Rear-> " + RegularSeat::location();
 }
-int RearRegularSeat::price() override{
+int RearRegularSeat::price() {
 return (Seat::basePrice+MainHallSeat::mainHallSeatPrice);
 }
 
