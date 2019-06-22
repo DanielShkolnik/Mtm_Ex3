@@ -103,11 +103,11 @@ public:
 class RegularSeat:public MainHallSeat
 {
 private:
-    char area;
+    const string& area;
 public:
-    RegularSeat(char area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
+    RegularSeat(const string& area, int line, int chair, int basePrice):MainHallSeat(line,chair,basePrice), area(area){}
     string location() override{
-        return  "area: " + std::to_string(this->area) + Seat::location();    //"area: " + this->area + Seat::location();
+        return  "area: " + this->area + " " + Seat::location();    //"area: " + this->area + Seat::location();
     };
 };
 
@@ -117,7 +117,7 @@ class FrontRegularSeat:public RegularSeat
 private:
     int const frontRegularSeatPrice=500;
 public:
-    FrontRegularSeat(char area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
+    FrontRegularSeat(const string& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
         return  "Front-> " + RegularSeat::location();
     }
@@ -133,7 +133,7 @@ class MiddleRegularSeat:public RegularSeat
 private:
     int const middleRegularSeatPrice=250;
 public:
-    MiddleRegularSeat(char area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
+    MiddleRegularSeat(const string& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
         return  "Middle-> " + RegularSeat::location();
     }
@@ -147,7 +147,7 @@ public:
 class RearRegularSeat:public RegularSeat
 {
 public:
-    RearRegularSeat(char area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
+    RearRegularSeat(const string& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
     string location() override{
         return  "Middle-> " + RegularSeat::location();
     }
