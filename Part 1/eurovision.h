@@ -169,7 +169,6 @@ public :
         friend bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2);
     private:
         ParticipantScore* participantScorePtr;
-        bool internal;
     };
     Iterator begin();
     Iterator end();
@@ -180,6 +179,7 @@ bool operator==(const MainControl::Iterator& iterator1, const MainControl::Itera
 ostream& operator<<(ostream& os, const MainControl& mainControl);
 
 //*************************Get_Function******************************************************
+//get fucntion returns the i max iterator for a given container and a predicate to compare by
 template <class Iterator, class Predicate>
 Iterator get(Iterator begin, Iterator end,Predicate predicate,int i){
     std::vector<Iterator> places;
@@ -194,7 +194,6 @@ Iterator get(Iterator begin, Iterator end,Predicate predicate,int i){
                 max = k;
             }
         }
-        //std::swap(j,max);
         Iterator temp = *j;
         *j = *max;
         *max = temp;
