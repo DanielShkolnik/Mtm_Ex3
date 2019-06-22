@@ -1,16 +1,16 @@
 #include "seat.h"
 
-const int NO_PRICE=0;
+
 
 const char* NoPrice::what() const noexcept{
 return  "Not For Sale !";
 }
 
-virtual string Seat::location(){
+string Seat::location(){
     return  "line: " + std::to_string(this->line) + ", chair: " + std::to_string(this->chair);
 }
 
-Seat::Seat(int line, int chair, int basePrice=NO_PRICE): line(line), chair(chair), basePrice(basePrice){}
+Seat::Seat(int line, int chair, int basePrice): line(line), chair(chair), basePrice(basePrice){}
 
 GreenRoomSeat::GreenRoomSeat(int line, int chair): Seat(line,chair){}
 int GreenRoomSeat::price() {
@@ -32,7 +32,7 @@ int GoldenCircleSeat::price() {
 return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+SpecialSeat::specialSeatPrice+goldenCircleSeatPrice);
 }
 
-DisablePodiumSeat::DisablePodiumSeat(int line, int chair, int basePrice=NO_PRICE):SpecialSeat(line,chair,basePrice){}
+DisablePodiumSeat::DisablePodiumSeat(int line, int chair, int basePrice):SpecialSeat(line,chair,basePrice){}
 string DisablePodiumSeat::location() {
 return  "Disable Podium-> " + Seat::location();
 }

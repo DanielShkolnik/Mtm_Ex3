@@ -7,6 +7,7 @@ using std::exception;
 using std::cout;
 using std::endl;
 
+const int NO_PRICE=0;
 
 // ---------------------------------------------
 class NoPrice: public exception
@@ -100,13 +101,9 @@ class FrontRegularSeat:public RegularSeat
 private:
     int const frontRegularSeatPrice=500;
 public:
-    FrontRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
-    string location() override{
-        return  "Front-> " + RegularSeat::location();
-    }
-    int price() override{
-        return (Seat::basePrice+MainHallSeat::mainHallSeatPrice+frontRegularSeatPrice);
-    }
+    FrontRegularSeat(const char& area, int line, int chair, int basePrice);
+    string location() override;
+    int price() override;
     ~FrontRegularSeat() override= default;
 };
 
@@ -126,13 +123,9 @@ public:
 class RearRegularSeat:public RegularSeat
 {
 public:
-    RearRegularSeat(const char& area, int line, int chair, int basePrice):RegularSeat(area,line,chair,basePrice){}
-    string location() override{
-        return  "Rear-> " + RegularSeat::location();
-    }
-    int price() override{
-        return (Seat::basePrice+MainHallSeat::mainHallSeatPrice);
-    }
+    RearRegularSeat(const char& area, int line, int chair, int basePrice);
+    string location() override;
+    int price() override;
     ~RearRegularSeat() override= default;
 };
 
