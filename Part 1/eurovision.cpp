@@ -41,16 +41,20 @@ MainControl& MainControl::operator+=(Vote vote){
             ++(vote.voter);
         }
     }
+    bool voted = false;
     if(vote.voter.voterType()==Judge && vote.voter.timesOfVotes() < 1 ){
         for(int i=0;i<MAX_JUDGE_VOTES;i++){
             if(vote.selectedStates[i] != vote.voter.state()){
                 int index = this->getParticipantIndexByStateName(vote.selectedStates[i]);
                 if(index >= 0){
                     this->participantScores[index].addJudgeVote(i);
+                    voted = true;
                 }
             }
         }
-        ++(vote.voter);
+        if(voted){
+            ++(vote.voter);
+        }
     }
     return *this;
 }
