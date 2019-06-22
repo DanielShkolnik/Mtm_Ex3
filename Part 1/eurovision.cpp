@@ -183,7 +183,11 @@ MainControl::Iterator MainControl::begin(){
 }
 
 MainControl::Iterator MainControl::end(){
-    return MainControl::Iterator(&this->participantScores[this->getFirstEmptyIndex()]);
+    int index = this->getFirstEmptyIndex();
+    if(index == FULL){
+        return MainControl::Iterator(this->participantScores+ this->maxParticipants);
+    }
+    return MainControl::Iterator(&this->participantScores[index]);
 }
 //***********************************Predicate******************************************************
 
