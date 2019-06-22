@@ -7,10 +7,10 @@ using std::string;
 template <class Iterator,class Predicate>
 int countPairs(Iterator first, Iterator last, Predicate predicate){
     int count = 0;
-    for(Iterator i=first; i!=last; ++i){
+    for(Iterator i=first; !(i==last); ++i){
         Iterator j=i;
         ++j;
-        while (j!=last){
+        while (!(j==last)){
             if(predicate(*i,*j) || predicate(*j,*i)){
                 count++;
             }
