@@ -179,6 +179,7 @@ ostream& operator<<(ostream& os, MainControl& mainControl){
     return os;
 }
 MainControl::Iterator MainControl::begin(){
+    this->sortParticipantsByStateNames();
     return MainControl::Iterator(this->participantScores);
 }
 
