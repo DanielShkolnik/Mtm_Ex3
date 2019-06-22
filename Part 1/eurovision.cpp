@@ -6,13 +6,14 @@ const int FULL=-1;
 const int NOT_IN_ARRAY=-1;
 
 //*************************MAIN CONTROL**************************************
-
+// The constructor of MainControl gets max song length max participants and max regular times to vote.
 MainControl::MainControl(int maxSongLength, int maxParticipants, int maxRegularTimesToVote):
                         phase(Registration),participantScores(new ParticipantScore[maxParticipants]){
     this->maxSongLength=maxSongLength;
     this->maxParticipants=maxParticipants;
     this->maxRegularTimesToVote=maxRegularTimesToVote;
 }
+// operator += to add a participant to the eurovision.
 MainControl& MainControl::operator+=(Participant& participant){
     if(!(this->legalParticipant(participant)) || this->phase != Registration){
         return *this;
@@ -26,7 +27,7 @@ MainControl& MainControl::operator+=(Participant& participant){
     }
     return *this;
 }
-
+// operator += to add a vote to eurovision
 MainControl& MainControl::operator+=(Vote vote){
     if(this->phase!=Voting || !(this->isStateExist(vote.voter.state()))){
         return *this;
@@ -58,7 +59,7 @@ MainControl& MainControl::operator+=(Vote vote){
     }
     return *this;
 }
-
+// Changes the phase of the eurovision
 void MainControl::setPhase(Phase phase){
     if((this->phase==Registration && phase==Contest) ||
         (this->phase==Contest && phase==Voting)){
@@ -66,7 +67,7 @@ void MainControl::setPhase(Phase phase){
     }
 
 }
-
+// returns an index to the participantScores array for a given participant
 int MainControl::getParticipantIndex(const Participant& participant){
     for (int i=0; i<this->maxParticipants; i++) {
         if (this->participantScores[i].getParticipant() == &participant) {
@@ -76,7 +77,7 @@ int MainControl::getParticipantIndex(const Participant& participant){
     return NOT_IN_ARRAY;
 }
 
-
+// operator -= for removing a participant from eurovision
 MainControl& MainControl::operator-=(const Participant& participant){
     if(this->phase != Registration){
         return *this;
@@ -89,14 +90,16 @@ MainControl& MainControl::operator-=(const Participant& participant){
     this->sortParticipantsByStateNames();
     return *this;
 }
-
+// destroctor of MainControl
 MainControl::~MainControl(){
     delete[] this->participantScores;
 }
-
+// checks if state exist in the eurovision
 bool MainControl::isStateExist(const string& stateName){
     return (this->getParticipantIndexByStateName(stateName) >= 0);
 }
+
+// returns the first empty participantScore (points to nullptr) in the participantScore array
 int MainControl::getFirstEmptyIndex(){
     for(int i=0;i<this->maxParticipants;i++){
         if(this->participantScores[i].getParticipant() == nullptr){
@@ -105,7 +108,7 @@ int MainControl::getFirstEmptyIndex(){
     }
     return FULL;
 }
-
+// return the index of a participant in the participantScore array by state name
 int MainControl::getParticipantIndexByStateName(string stateName) const {
     for(int i=0;i<this->maxParticipants;i++){
         if(this->participantScores[i].getParticipant()!= nullptr && this->participantScores[i].getParticipant()->state()==stateName){
@@ -114,17 +117,18 @@ int MainControl::getParticipantIndexByStateName(string stateName) const {
     }
     return NOT_IN_ARRAY;
 }
-
+// checks if a participant is legal
 bool MainControl::legalParticipant(const Participant& participant) const{
     if(participant.state()=="" || participant.song()=="" || participant.timeLength() > this->maxSongLength){
         return false;
     }
     return true;
 }
+// checks if there is a participant from a given state in the eurovision
 bool MainControl::participate(const string& stateName) const{
     return (this->getParticipantIndexByStateName(stateName)>=0);
 }
-
+// sort the participantScores array by the participants state name
 void MainControl::sortParticipantsByStateNames(){
     for(int i=0; i<this->maxParticipants; i++) {
         int maxIndex = i;
@@ -142,12 +146,13 @@ void MainControl::sortParticipantsByStateNames(){
         this->swapParticipantsByIndex(i,maxIndex);
     }
 }
+// swap two participantScores by there index in the participantScore array
 void MainControl::swapParticipantsByIndex(int participantScore1,int participantScore2){
     ParticipantScore temp = this->participantScores[participantScore1];
     this->participantScores[participantScore1] = this->participantScores[participantScore2];
     this->participantScores[participantScore2] = temp;
 }
-
+// operator << for printing MainControl
 ostream& operator<<(ostream& os, MainControl& mainControl){
     os << "{" << endl;
     if(mainControl.phase==Contest){
@@ -178,11 +183,12 @@ ostream& operator<<(ostream& os, MainControl& mainControl){
 
     return os;
 }
+// returns the iterator to the start of participantScore array
 MainControl::Iterator MainControl::begin(){
     this->sortParticipantsByStateNames();
     return MainControl::Iterator(this->participantScores);
 }
-
+// returns the iterator to the following address of the last participantScore in the array
 MainControl::Iterator MainControl::end(){
     int index = this->getFirstEmptyIndex();
     if(index == FULL){
@@ -191,7 +197,7 @@ MainControl::Iterator MainControl::end(){
     return MainControl::Iterator(&this->participantScores[index]);
 }
 //***********************************Predicate******************************************************
-
+// predicate function object constructor
 MainControl::predicate::predicate(VoterType voterType):voterType(voterType){}
 bool MainControl::predicate::operator()(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
     if(this->voterType==Regular){
@@ -202,7 +208,8 @@ bool MainControl::predicate::operator()(const ParticipantScore& participantScore
     }
     return this->predicateByAll(participantScore1,participantScore2);
 }
-
+// these functions are for what type of compare to do for two given participantScres
+// can be by judge score by regular score or by all
 bool MainControl::predicate::predicateByJudge(const ParticipantScore& participantScore1, const ParticipantScore& participantScore2){
     if (participantScore1.getJudgeVote()==participantScore2.getJudgeVote()){
         return participantScore1.getParticipant()->state()>participantScore2.getParticipant()->state();
@@ -224,7 +231,7 @@ bool MainControl::predicate::predicateByAll(const ParticipantScore& participantS
     }
     return participantScore1All>participantScore2All;
 }
-
+// operator () for the predicate function objec gets the i max state for the sum of votes of VoterType
 string  MainControl::operator()(int i, VoterType voterType){
     MainControl::Iterator iterator;
     if(voterType==Regular){
@@ -245,26 +252,29 @@ string  MainControl::operator()(int i, VoterType voterType){
 
 
 //************************ Iterator *****************************************
+// Iterator constructors for internal use of MainControl
+// gets the pointer to the ParticipantScore array
 MainControl::Iterator::Iterator(ParticipantScore* participantScore): participantScorePtr(participantScore){}
 MainControl::Iterator::Iterator():participantScorePtr(nullptr){}
-
+// operator ++ for incrimenting the iterator
 MainControl::Iterator&  MainControl::Iterator::operator++(){
     this->participantScorePtr++;
     return *this;
 }
+// perator < for compering between iterators location
 bool operator<(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
     return iterator1.participantScorePtr < iterator2.participantScorePtr;
 }
-
+// dereferens operator for the iterator returns the participantScore
 ParticipantScore& MainControl::Iterator::operator*(){
     return *(participantScorePtr);
 }
-
+// operator == for comparing between iterators
 bool operator==(const MainControl::Iterator& iterator1, const MainControl::Iterator& iterator2){
     return iterator1.participantScorePtr == iterator2.participantScorePtr;
 }
 //*************************Participant**************************************
-
+//Participant constructor
 Participant::Participant(const string& stateName, const string& songName,int songLength,
                          const string& singerName):
                          stateName(stateName) {
@@ -273,7 +283,7 @@ Participant::Participant(const string& stateName, const string& songName,int son
     this->songLength=songLength;
     this->registered= false;
 }
-
+// update the participants values if default values are given then doesnt chage the old ones
 void Participant::update(const string& songName, int songLength, const string& singerName){
     if (!this->registered){
         if(songName!="") this->songName=songName;
@@ -281,7 +291,7 @@ void Participant::update(const string& songName, int songLength, const string& s
         if(singerName!="") this->singerName=singerName;
     }
 }
-
+// getters functions for participant
 string Participant::state() const{
     return this->stateName;
 }
@@ -301,11 +311,11 @@ string Participant::singer() const{
 bool Participant::isRegistered() const {
     return this->registered;
 }
-
+// update the registered flag that tells if a participant is registered
 void Participant::updateRegistered(bool setRegistration){
     this->registered=setRegistration;
 }
-
+// operator << for printing participant
 ostream& operator<<(ostream& os, const Participant& participant){
     return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength()
                 << '/' << participant.singer() << ']';
@@ -313,13 +323,13 @@ ostream& operator<<(ostream& os, const Participant& participant){
 
 
 //*************************Voter**************************************
-
+// constructor of voter
 Voter::Voter(const string& originState, VoterType voterType){
     this->originState=originState;
     this->typeOfVoter=voterType;
     this->numOfVotes=0;
 }
-
+// getters functions of voter
 string Voter::state() const {
     return this->originState;
 }
@@ -331,12 +341,12 @@ VoterType Voter::voterType() const {
 int Voter::timesOfVotes() const{
     return this->numOfVotes;
 }
-
+// operator ++ to increment the times this voter has voted
 Voter& Voter::operator++(){
     this->numOfVotes+=1;
     return *this;
 }
-
+// oprator << to print a voter
 ostream& operator<<(ostream& os, const Voter& voter){
     os << '<' << voter.state() << '/';
     if(voter.voterType()==Regular){
@@ -349,7 +359,7 @@ ostream& operator<<(ostream& os, const Voter& voter){
 }
 
 //*************************Vote**************************************
-
+// vote builder
 Vote::Vote(Voter& voter, const string& state1, const string& state2, const string& state3, const string& state4,
         const string& state5, const string& state6, const string& state7, const string& state8, const string& state9,
            const string& state10):
@@ -365,19 +375,20 @@ Vote::Vote(Voter& voter, const string& state1, const string& state2, const strin
     this->selectedStates[8]=state9;
     this->selectedStates[9]=state10;
 }
-
+//vote destructor
 Vote::~Vote(){
     delete[] selectedStates;
 }
 
 //*************************ParticipantScore**************************************
-
+// participantScore constructor
+// this class is storing the participant and its score
 ParticipantScore::ParticipantScore(){
     this->participant= nullptr;
     this->regularVotes=0;
     this->judgeVotes=0;
 }
-
+// set the participant to this participantScore
 void ParticipantScore::setParticipant(Participant* participant){
     if(participant == nullptr){
         //remove participant
@@ -390,11 +401,11 @@ void ParticipantScore::setParticipant(Participant* participant){
     this->participant=participant;
 
 }
-
+// adds a regular vote to participantScore
 void ParticipantScore::addRegularVote(){
     this->regularVotes+=1;
 }
-
+// adds a judge vote to participantScore
 void ParticipantScore::addJudgeVote(int place){
     if (place==0) {
         this->judgeVotes+=12;
@@ -406,31 +417,30 @@ void ParticipantScore::addJudgeVote(int place){
         this->judgeVotes+=(10-place);
     }
 }
-
+// resets the votes for participant score
+// used when removing a participant
 void ParticipantScore::resetVotes(){
     this->regularVotes=0;
     this->judgeVotes=0;
 }
-
+// returns the participant from the participantScore
 Participant* ParticipantScore::getParticipant() const{
     return this->participant;
 }
-
+// prints the participant
+// used for the iterator dereference prints
 ostream& operator<<(ostream& os, const ParticipantScore& participantScore){
-    //return os << participantScore.participant->state() << " : Regular(" << participantScore.regularVotes << ") Judge("
-    //<< participantScore.judgeVotes << ")";
     return  os << *participantScore.getParticipant();
 }
-
+//gets the regular votes
 int ParticipantScore::getRegularVote() const{
     return this->regularVotes;
 }
-
+// gets the judge votes
 int ParticipantScore::getJudgeVote() const{
     return this->judgeVotes;
 }
 
-//*************************Get_Function******************************************************
 
 
 
